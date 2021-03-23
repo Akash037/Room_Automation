@@ -208,6 +208,10 @@ void check_automate_state()
 
 void automation()
 {
+  if(automate_value==0)
+  {
+    automate=0;
+  }
   if((automate==1)&&(pirvalue==HIGH))
   {
   digitalWrite(fanop, LOW);
