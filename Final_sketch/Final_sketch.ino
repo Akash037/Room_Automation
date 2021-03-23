@@ -29,6 +29,7 @@ int tubelightvalue;
 int motion = 1;
 int automate_value;
 int automate=0;
+int fan_on=0;
 
 int led_state=0;
 int last_ledvalue=0;
@@ -190,11 +191,19 @@ if((motion==0)&&(pirvalue==LOW))
 
 void check_automate_state()
 {
-  if((automate_value == 1)&&(fan_state==1)&&(led_state==1)&&(tubelight_state==1))
+  if((automate_value == 1)&&(led_state==1)&&(tubelight_state==1)&&(pirvalue==LOW))
   {
     digitalWrite(fanop, HIGH);
     digitalWrite(tubelightop, HIGH);
     digitalWrite(ledop, LOW);
+    if(fan_state==1)
+    {
+      fan_on=1;
+    }
+    else
+    {
+      fan_on=0;
+    }
     fan_state=0;
     tubelight_state=0;
     led_state=1;
@@ -202,7 +211,6 @@ void check_automate_state()
     Blynk.virtualWrite(V6, LOW); //fan
     Blynk.virtualWrite(V5, LOW); //tubelight
     Blynk.virtualWrite(V4, HIGH); //LED
-    delay(8000);
   }
 }
 
@@ -214,14 +222,17 @@ void automation()
   }
   if((automate==1)&&(pirvalue==HIGH))
   {
-  digitalWrite(fanop, LOW);
+    if(fan_on==1)
+    {
+      digitalWrite(fanop, LOW);
+      fan_state=1;
+      Blynk.virtualWrite(V6, HIGH); //fan
+    }
   digitalWrite(tubelightop, LOW);
-  delay(500);
+  delay(300);
   digitalWrite(ledop, HIGH);
-  fan_state=1;
   tubelight_state=1;
   led_state=0;
-  Blynk.virtualWrite(V6, HIGH); //fan
   Blynk.virtualWrite(V5, HIGH); //tubelight
   Blynk.virtualWrite(V4, LOW); //LED
   automate=0;
