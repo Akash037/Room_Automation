@@ -49,6 +49,18 @@ char pass[] = "762122ds";
 //const char* ssid = "JioFiber4g";
 const char* password = "762122ds";
 
+//Constant Time
+BLYNK_WRITE(V7)
+{
+    digitalWrite(0, LOW);
+    tubelight_state=1;
+    Blynk.virtualWrite(V5, HIGH);
+    for(int i=0; i<=100; i++)
+    {
+      delay(6000);
+      Blynk.run();
+    }
+}
 
 
 //LED
@@ -229,7 +241,7 @@ void automation()
       Blynk.virtualWrite(V6, HIGH); //fan
     }
   digitalWrite(tubelightop, LOW);
-  delay(300);
+  delay(500);
   digitalWrite(ledop, HIGH);
   tubelight_state=1;
   led_state=0;
